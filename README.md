@@ -1,2 +1,10 @@
 # ARNF
-Artificial Regulatory Networks Framework: A Framework designed to accelerate research on Artificial Regulatory Networks
+
+<b>Artificial Regulatory Networks Framework: </b>
+<br/>
+A Framework designed to accelerate research on Artificial Regulatory Networks
+<br/>
+<br/>
+Author: Iliya Miralavy
+<br/>
+Michigan State University
