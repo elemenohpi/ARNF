@@ -13,6 +13,7 @@ class Linear(AbstractGenome):
 		self.inhSize = int(config[("Genome."+type(self).__name__).upper()]['inhSize'])
 		self.enhSize = int(config[("Genome."+type(self).__name__).upper()]['enhSize'])
 		self.protSeqMult = int(config[("Genome."+type(self).__name__).upper()]['protSeqMult'])
+		self.geneLength = self.inhSize + self.enhSize + (self.protSize * self.protSeqMult) + len(self.promoter)
 		self.DNA = []
 		self.genes = []
 		self.fitness = 0
@@ -52,8 +53,7 @@ class Linear(AbstractGenome):
 					pattern.append(0)
 					comp_pattern.append(1)
 			self.genes.append(G.Gene("00000000", pattern, comp_pattern, [0 for b in range(self.protSize)], "O"))
-		for gene in self.genes:
-			gene.concentration = 1 / len(self.genes)
+		self.resetConcentrations()
 		# for gene in self.genes:
 		# 	gene.print()
 		pass
@@ -79,12 +79,12 @@ class Linear(AbstractGenome):
 					pattern.append(0)
 					comp_pattern.append(1)
 			self.genes.append(G.Gene("00000000", pattern, comp_pattern, [0 for b in range(self.protSize)], "O"))
-		for gene in self.genes:
-			gene.concentration = 1 / len(self.genes)
+		self.resetConcentrations()
 
 
 	# Finds genes in a DNA. Format: [Promoter -> Enhancer -> Inhibitor -> n * protSize]
 	def findGenes(self):
+		self.genes = []
 		for i in range(len(self.DNA)-len(self.promoter)-self.protSize*self.protSeqMult-self.enhSize-self.inhSize-1): #here
 			if ''.join(str(e) for e in self.DNA[i:i+len(self.promoter)]) == self.promoter:
 				enhancer = self.DNA[i+len(self.promoter)+1:i+len(self.promoter)+1+self.enhSize]
@@ -117,6 +117,20 @@ class Linear(AbstractGenome):
 
 	def getFitness(self):
 		return self.fitness
-		
 
+	def addInputGenes():
+		pass
+
+	def addOutputGenes():
+		pass
+
+	def getDNA(self):
+		return self.DNA
+		
+	def addGene(self):
+		self.DNA += [random.randint(0,1) for b in range(self.geneLength)]
+
+	def resetConcentrations(self):
+		for gene in self.genes:
+			gene.concentration = 1 / len(self.genes)
 

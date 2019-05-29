@@ -27,3 +27,16 @@ class AbstractGenome(ABC):
 	@abstractmethod
 	def reinitialize():
 		pass
+
+	# Returns the DNA sequence of the genome
+	@abstractmethod
+	def getDNA():
+		pass
+
+	@abstractmethod
+	def addGene():
+		pass
+
+	@abstractmethod
+	def resetConcentrations():
+		pass

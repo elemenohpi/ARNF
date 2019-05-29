@@ -1,10 +1,10 @@
 [CORE]
-runs = 10
-task = ClosedWorld
-genome = Linear
-seed = 100
-network = ARNB
-evolver = EOne
+runs = 100000
+task = StandardRegression
+genome = Discrete
+seed = 101
+network = ARNU
+evolver = ETwo
 elitism = True
 
 [GENOME.LINEAR]
@@ -16,25 +16,19 @@ protsize = 32
 protseqmult = 5
 
 [GENOME.DISCRETE]
-internalgenescount = 5
+internalgenescount = 1
 enhsize = 32
 inhsize = 32
 protsize = 32
 protseqmult = 5
 
-[TASK.MATHFORMULA]
-
-[TASK.STANDARDREGRESSION]
-
 [TASK.CLOSEDWORLD]
-regulations = 1000
+regulations = 10000
 showoutput = True
-logregulations = False
-
-[TASK.ARTIFICIALANT]
+logregulations = True
 
 [TASK.GENERATETHEINPUT]
-outputcount = 5
+outputcount = 10
 showoutput = False
 networktime = 10
 
@@ -50,14 +44,17 @@ complexificationrate = 0.1
 populationsize = 100
 showoutput = True
 logevolution = False
-mode = minimize
-
-[NETWORK.PARN]
-beta = 1
-delta = 1
-mode = binary
 
 [NETWORK.ARNR]
+beta = 1
+delta = 10
+minin = 1
+maxin = 7
+minout = 2
+maxout = 11
+intmode = True
+
+[NETWORK.ARNU]
 beta = 1
 delta = 1
 minin = -1
@@ -66,8 +63,13 @@ minout = -1
 maxout = 1
 intmode = False
 
+[NETWORK.BRAIN]
+mutationrate = 0.01
+populationsize = 100
+showoutput = True
+logevolution = False
+
 [NETWORK.ARNB]
 beta = 1
 delta = 1
 mode = binaryIncremental
-

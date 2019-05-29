@@ -16,6 +16,8 @@ def main():
 	argParser = argparse.ArgumentParser(description="A tool to study Artificial Regulatory Networks.")
 	argParser.add_argument('-gc', '--generateConfig',
 		help="Generates the default config.ini file. Note: removes the existing file.", action="store_true")
+	argParser.add_argument('-gus', '--generateUniqueSeq',
+		help="Generates the default inputs.ini file. Note: removes the existing file.", action="store_true")
 	argParser.add_argument('-sp', '--simplePlot',
 		help="Plots the files on the output folder. Can have these values: Task, Evolution")
 	args = argParser.parse_args()
@@ -23,6 +25,11 @@ def main():
 	if args.generateConfig:
 		generateConfig()
 		print("ARNF: config.ini generated. Exiting!\n")
+		exit(1)
+
+	if args.generateUniqueSeq:
+		generateUniqueSeq()
+		print("ARNF: inputs.ini generated. Exiting!\n")
 		exit(1)
 
 	if args.simplePlot:
@@ -50,20 +57,16 @@ def gConfig():
 			"task": "ClosedWorld",
 			"genome" : "Linear",
 			"seed" : 100,
-			"beta" : 1,
-			"delta" : 1,
+			"network" : "ARNB",
 			"evolver" : "EOne",
 			"elitism" : True,
-			"mode" : "binaryIncremental",
-			"min" : 0,
-			"max" : 1,
 		}
 	return conf
 
 	
 # Dynamically generates the config file
 def generateConfig():
-	dirList = ["Genome", "Task", "Evolver"]
+	dirList = ["Genome", "Task", "Evolver", "Network"]
 
 	parser = configparser.ConfigParser()
 	parser['CORE'] = gConfig()
@@ -78,6 +81,32 @@ def generateConfig():
 					parser[(eachDir + '.' +name[0]).upper()] = my_class.gConfig()
 
 	with open('config.ini', 'w') as configfile:
+		parser.write(configfile)
+	pass
+
+def generateUniqueSeq():
+	parser = configparser.ConfigParser()
+	results = {}
+	for i in range(1000):
+		string = ""
+		for j in range(32):
+			string += str(random.randint(0,1))
+		results[i] = string
+	temp = {}
+	counter = 0
+	for index, seq in results.items():
+		found = 0
+		for key, value in temp.items():
+			if value == seq:
+				found = 1
+				break
+		if found == 0:
+			temp[counter] = seq
+			counter += 1
+
+	parser["INP"] = temp
+
+	with open('inputs.ini', 'w') as configfile:
 		parser.write(configfile)
 	pass
 

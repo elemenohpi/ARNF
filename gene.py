@@ -1,5 +1,6 @@
 class Gene:
 	def __init__(self, promoter, enhancer, inhibitor, protein, geneType, concentration=0.):
+		self.ID = None
 		self.promoter = promoter
 		self.enhancer = enhancer
 		self.inhibitor = inhibitor
@@ -12,6 +13,9 @@ class Gene:
 		self.enhImpacts = []
 		self.inhImpacts = []
 		self.type = geneType
+		self.extra = [] # extra info to store in a gene.
+
+	
 	
 	def print(self):
 		print("\nPromoter: {}\nEnhancer: {}\nInhibitor: {}\nProtein: {}\nConcentration: {}\nType: {}\n".format(self.promoter, self.enhancer, self.inhibitor, self.protein, self.concentration, self.type))

@@ -7,4 +7,15 @@ class AbstractNetwork(ABC):
 	def gConfig():
 		pass
 
+	@abstractmethod
+	def build():
+		pass
+
+	@abstractmethod
+	def regulate():
+		pass
+
+	@abstractmethod
+	def setGenes():
+		pass
 	

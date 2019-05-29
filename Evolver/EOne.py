@@ -1,5 +1,4 @@
 from Evolver.AbstractEvolver import AbstractEvolver
-import network as N
 import configparser
 import copy
 import random
@@ -7,7 +6,7 @@ import random
 # Basic Evolver that only does mutation with a constant chance and uses Tournament Selection
 class EOne(AbstractEvolver):
 
-	def __init__(self, genomeClass, taskClass, runs, elitism):
+	def __init__(self, network, genomeClass, taskClass, runs, elitism):
 		configParser = configparser.ConfigParser()
 		configParser.read("config.ini")
 		self.popSize = int(configParser[("Evolver."+type(self).__name__).upper()]['populationSize'])
@@ -22,12 +21,12 @@ class EOne(AbstractEvolver):
 		self.taskClass = taskClass
 		self.runs = runs
 		self.elitism = elitism
+		self.grn = network
 		print("ARNF: Creating a population of ARNs with size: {}".format(self.popSize))
 		for i in range(self.popSize):
 			individual = self.genomeClass()
 			individual.initialize(self.taskClass().requirements())
 			self.pop.append(individual)
-		pass
 
 	def evolve(self):
 		print("ARNF: Starting the evolution for {} rounds.".format(self.runs))
@@ -38,9 +37,9 @@ class EOne(AbstractEvolver):
 			for index, individual in enumerate(self.pop):
 				individual.reinitialize(self.taskClass().requirements())
 				task = self.taskClass()
-				grn = N.Network(individual.getGenes())
-				grn.build()
-				task.setGRN(grn)
+				self.grn.setGenes(individual.getGenes())
+				self.grn.build()
+				task.setGRN(self.grn)
 				fitness = task.start()
 				totFitness += fitness
 				individual.setFitness(fitness)
@@ -51,7 +50,7 @@ class EOne(AbstractEvolver):
 					maxFitness[2] = len(individual.genes)
 
 			if self.showOutput:
-				print("Generation: {} Average Fitness: {} Best Fitness: {} Gene Count: {}".format(generation, round(totFitness/len(self.pop),2), round(maxFitness[1],2), maxFitness[2]))
+				print("Generation: {} Average Fitness: {} Best Fitness: {} Gene Count: {}".format(generation, round(totFitness/len(self.pop),4), round(maxFitness[1],4), maxFitness[2]))
 			
 			# Elitism
 			if self.elitism:
@@ -69,12 +68,12 @@ class EOne(AbstractEvolver):
 		pass
 
 	def mutate(self, i):
-		for j, base in enumerate(self.pop[i].DNA):
+		for j, base in enumerate(self.pop[i].getDNA()):
 			if random.random() < self.mutationRate:
 				if base == 0:
-					self.pop[i].DNA[j] = 1
+					self.pop[i].getDNA()[j] = 1
 				else:
-					self.pop[i].DNA[j] = 0
+					self.pop[i].getDNA()[j] = 0
 		pass
 
 	@staticmethod
